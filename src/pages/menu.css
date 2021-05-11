@@ -1,0 +1,49 @@
+/* Menu */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    background-color: #333333;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    
+    justify-content: space-evenly;
+    box-shadow: 0 0 0.5rem #aaa;
+    border-radius: 2rem;
+    height: 6.5rem;
+    
+    
+}
+
+
+.menu-item {
+    width: 10rem;
+    margin: 0 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-family: 'Comic Sans';
+    font-weight: 700;
+    font-size: 1.75rem;
+    text-decoration: none;
+    color: #dea6f7;
+    background-color: transparent;
+    columns: black;
+    cursor: pointer;
+    transition: 0.3s ease-in;
+}
+
+.menu-item:hover {
+    font-size: 2.25rem;
+}
+
+.menu-logo {
+    height: 8rem;
+    transition: 0.2s ease-in;
+
+}
+
+.menu-logo:hover {
+    height: 9rem;
+}

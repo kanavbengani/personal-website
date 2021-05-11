@@ -1,0 +1,11 @@
+.about
+{
+    background-color: #333333;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 0 0.5rem #aaa;
+    border-radius: 2rem;
+    height: 25rem;
+}

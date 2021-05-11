@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Menu from './pages/menu';
+import About from './pages/about';
+import Experience from './pages/experience';
+import Projects from './pages/projects';
+import Contact from './pages/contact';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import './app.css';
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.about = React.createRef();
+    this.experience = React.createRef();
+    this.projects = React.createRef();
+    this.contact = React.createRef();
+  }
+
+  navigate = (location) => this[location].current.scrollIntoView({ behavior: 'smooth' });
+
+  render() {
+    return (
+      <div className="app" >
+        <Menu navigate={this.navigate} />
+        <About reference={this.about} />
+        <Experience reference={this.experience} />
+        <Projects reference={this.projects} />
+        <Contact reference={this.contact} />
+      </div>
+    );
+  }
 }
 
 export default App;
