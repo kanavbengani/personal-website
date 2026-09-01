@@ -203,6 +203,27 @@ a{color:inherit}
 .hub .ico:hover .lab,.hub .ico:focus-visible .lab{opacity:1;visibility:visible}
 .hub h1{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;font-weight:600;
   font-size:clamp(25px,3.1vw,46px);letter-spacing:-.034em;line-height:1;margin:0}
+.name-wrap{position:relative;display:inline-block;pointer-events:auto}
+.hub h1{cursor:pointer}
+.hub h1:hover{opacity:.86}
+.name-tip{
+  position:absolute;left:50%;top:calc(100% + 9px);transform:translateX(-50%) translateY(3px);
+  display:flex;align-items:baseline;gap:8px;white-space:nowrap;
+  background:var(--panel);border:1px solid var(--line);border-radius:6px;
+  padding:6px 10px;box-shadow:0 6px 20px rgba(0,0,0,.10);z-index:9;
+  font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:11px;
+  letter-spacing:.02em;color:var(--ink);
+  opacity:0;visibility:hidden;transition:opacity .15s,transform .15s,visibility .15s;
+}
+.name-tip em{font-style:normal;font-size:8.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted)}
+.name-wrap:hover .name-tip,
+.hub h1:focus-visible ~ .name-tip,
+.name-tip.show{
+  opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);
+}
+body.editing .name-tip{display:none}
+body.editing .hub h1{cursor:text}
 .hub .role-line{margin:clamp(7px,0.8vw,11px) 0 0;
   font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
   font-weight:600;font-size:clamp(9.5px,0.82vw,12px);letter-spacing:.15em;
@@ -497,7 +518,10 @@ dialog[open]{animation:pop .18s cubic-bezier(.2,.7,.3,1)}
 <main class="stage" id="stage">
   <svg class="wires" id="wires" aria-hidden="true"></svg>
   <div class="hub">
-    <h1>Kanav Bengani</h1>
+    <span class="name-wrap">
+      <h1 id="nameEl" tabindex="0" role="button" aria-label="Copy email address">Kanav Bengani</h1>
+      <span class="name-tip" id="nameTip" aria-hidden="true"></span>
+    </span>
     <p class="role-line">Software Engineer @ <a class="tip" href="#hubspot" data-card="hubspot">HubSpot<span class="tipbox">See the HubSpot card</span></a></p>
     <p class="bio">I like building backend systems, tinkering with the buzzword that is AI,
       and occasionally making things people actually use &mdash;
@@ -1176,6 +1200,47 @@ if(CONTENT.hub){
   if(CONTENT.hub.role) hubRole.innerHTML=CONTENT.hub.role;
   if(CONTENT.hub.bio)  hubBio.innerHTML=CONTENT.hub.bio;
 }
+
+/* ---------------- hover the name to copy the email ---------------- */
+var EMAIL="kanavbengani@gmail.com";
+var nameEl=document.getElementById("nameEl"), nameTip=document.getElementById("nameTip");
+function tip(main,sub){
+  nameTip.innerHTML="";
+  nameTip.appendChild(document.createTextNode(main));
+  if(sub){ var e=document.createElement("em"); e.textContent=sub; nameTip.appendChild(e); }
+}
+tip(EMAIL,"click to copy");
+var tipTimer=null;
+function copyEmail(){
+  function done(ok){
+    clearTimeout(tipTimer);
+    tip(ok?"Copied":EMAIL, ok?"":"select and copy");
+    nameTip.classList.add("show");          /* touch has no hover to reveal it */
+    tipTimer=setTimeout(function(){
+      tip(EMAIL,"click to copy");
+      nameTip.classList.remove("show");
+    },1600);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(EMAIL).then(function(){ done(true); },function(){ fallback(); });
+  } else fallback();
+  function fallback(){
+    try{
+      var ta=document.createElement("textarea");
+      ta.value=EMAIL; ta.setAttribute("readonly","");
+      ta.style.cssText="position:fixed;top:-1000px;opacity:0";
+      document.body.appendChild(ta); ta.select();
+      var ok=document.execCommand("copy");
+      document.body.removeChild(ta);
+      done(ok);
+    }catch(e){ done(false); }
+  }
+}
+nameEl.addEventListener("click",function(){ if(!editing) copyEmail(); });
+nameEl.addEventListener("keydown",function(ev){
+  if(editing) return;
+  if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); copyEmail(); }
+});
 
 /* ---------------- pointers from the copy to a card ---------------- */
 document.querySelectorAll(".tip[data-card]").forEach(function(a){
