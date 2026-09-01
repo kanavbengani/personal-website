@@ -1,0 +1,69 @@
+{
+  "hub": {
+    "name": "Kanav Bengani",
+    "role": "Software Engineer @ <a class=\"tip\" href=\"#hubspot\" data-card=\"hubspot\">HubSpot<span class=\"tipbox\">See the HubSpot card</span></a>",
+    "bio": "I like building backend systems, tinkering with the buzzword that is AI,\n      and occasionally making things people actually use —\n      like <a class=\"tip\" href=\"#ballboy\" data-card=\"ballboy\"><em>Ballboy</em><span class=\"tipbox\">See the Ballboy card</span></a>."
+  },
+  "cards": {
+    "hubspot": {
+      "name": "HubSpot",
+      "role": "Software Engineer",
+      "when": "Dec 2025 — now"
+    },
+    "capitalone": {
+      "name": "Capital One",
+      "role": "Software Engineering Intern",
+      "when": "Jun — Aug 2025"
+    },
+    "klaviyo": {
+      "name": "Klaviyo",
+      "role": "Software Engineering Co-op",
+      "when": "Jan — May 2025"
+    },
+    "fidelity": {
+      "name": "Fidelity Investments",
+      "role": "Software Engineering Intern",
+      "when": "Jun — Aug 2024"
+    },
+    "jnj": {
+      "name": "Johnson &amp; Johnson",
+      "role": "Data Science Co-op",
+      "when": "Jan — May 2024"
+    },
+    "ballboy": {
+      "name": "Ballboy<br>",
+      "role": "Fantasy tennis",
+      "when": "May 2026 — now"
+    },
+    "reddit": {
+      "name": "Reddit Sentiment Analysis",
+      "role": "Agentic application",
+      "when": "Nov 2024"
+    },
+    "reversi": {
+      "name": "Reversi",
+      "role": "Java video game",
+      "when": "Nov 2023"
+    },
+    "factevo": {
+      "name": "FactEvo Optimization",
+      "role": "Evolutionary computing",
+      "when": "Mar — Jun 2024"
+    },
+    "shriners": {
+      "name": "Shriners Children's",
+      "role": "Biomedical AI",
+      "when": "2020 — 2022"
+    },
+    "neu": {
+      "name": "Northeastern University",
+      "role": "B.S. Data Science, Minor in Mathematics",
+      "when": "2022 — 2025"
+    },
+    "tams": {
+      "name": "Texas Academy of Mathematics &amp; Science",
+      "role": "Computer Science Track",
+      "when": "2020 — 2022"
+    }
+  }
+}
