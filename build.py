@@ -973,7 +973,7 @@ function solveArcs(cx,cy,W,H,boxes,hubBox){
   SECTOR_ORDER.forEach(function(cat){
     var sec=SECTORS[cat], el=arcEls[cat];
     if(!sec) return;
-    var lw=el.offsetWidth, lh=el.offsetHeight;
+    var lw=el.offsetWidth+14, lh=el.offsetHeight+10;   /* breathing room */
     var mid=(sec.from+sec.to)/2;
     var rot=mid+90;
     while(rot>180) rot-=360; while(rot<-180) rot+=360;
@@ -1005,8 +1005,8 @@ function solveArcs(cx,cy,W,H,boxes,hubBox){
     }
 
     var found=null, base=reach+30;
-    for(var dr=0; dr<=240 && !found; dr+=8){
-      for(var da=0; da<=18 && !found; da+=3){
+    for(var dr=0; dr<=300 && !found; dr+=8){
+      for(var da=0; da<=32 && !found; da+=3){
         var signs = da===0 ? [1] : [1,-1];
         for(var q=0;q<signs.length && !found;q++){
           var a=(mid+signs[q]*da)*Math.PI/180;
@@ -1279,6 +1279,12 @@ if(LOCAL){
   });
 }
 window.addEventListener("load",function(){ layout(); if(rDlg.open) sharpen(); });
+/* Web fonts are not covered by window.load. Until Bricolage arrives every label
+   is measured in the fallback face, so the collision solver works from the wrong
+   width and can tuck a label under a card. Re-run once the real fonts land. */
+if(document.fonts && document.fonts.ready){
+  document.fonts.ready.then(function(){ layout(); });
+}
 var rt=null;
 window.addEventListener("resize",function(){
   clearTimeout(rt);
