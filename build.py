@@ -131,14 +131,15 @@ HTML = """<meta charset="utf-8">
 
 <style>
 :root{
-  --paper:#F6F4F7; --panel:#FFFFFF; --ink:#17131C; --ink-2:#4E4757; --muted:#8B8394;
-  --line:#DFD9E3; --hair:#EAE5EE; --hover:#EFEBF2; --wire:#D8D1DD;
-  --tile:#FFFFFF; --tile-line:#E4DEE8; --scrim:rgba(23,19,28,.34);
+  /* warm off-white ground; panels stay a shade lighter so cards lift off it */
+  --paper:#F3F0E8; --panel:#FCFBF7; --ink:#1B1712; --ink-2:#514A40; --muted:#8B8378;
+  --line:#DED7C9; --hair:#E9E3D6; --hover:#ECE8DD; --wire:#D8D0C0;
+  --tile:#FFFFFF; --tile-line:#E3DCCD; --scrim:rgba(27,23,18,.34);
   --c-experience:#8E4B6E; --c-project:#3C7A78; --c-research:#8A6A35; --c-education:#4E5B86;
-  --bg-experience:#FBF3F7; --bd-experience:#E9D6E0;
-  --bg-project:#EFF7F6;    --bd-project:#CEE4E1;
-  --bg-research:#FBF6EC;   --bd-research:#EADEC6;
-  --bg-education:#F2F4FB;  --bd-education:#D7DDEE;
+  --bg-experience:#FAF2F2; --bd-experience:#E8D6D9;
+  --bg-project:#EFF6F0;    --bd-project:#D0E2DB;
+  --bg-research:#FAF5E9;   --bd-research:#E8DCC2;
+  --bg-education:#F2F3F7;  --bd-education:#D9DCE6;
   --a-experience:#6B2A4C; --a-project:#1F5250; --a-research:#66491A; --a-education:#2E3B67;
   color-scheme:light;
 }
