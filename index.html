@@ -777,16 +777,17 @@ function layout(){
      3. the automatic polar placement, ignoring the saved positions */
   var saved=nodes.map(function(n){ return {x:n.x,y:n.y,rot:n.rot}; });
   relax(false,16);
-  var sol=fits(cx,cy,hub,W,H);
+  var sol=fits(cx,cy,hub,W,H,true);        /* saved cards + saved labels */
+  if(!sol) sol=fits(cx,cy,hub,W,H,false);  /* saved cards, labels re-solved */
   if(!sol){
     nodes.forEach(function(n,i){ n.x=saved[i].x; n.y=saved[i].y; });
     relax(true,14);
-    sol=fits(cx,cy,hub,W,H);
+    sol=fits(cx,cy,hub,W,H,false);
   }
   if(!sol){
     nodes.forEach(function(n){ n.x=n.px; n.y=n.py; n.rot=n.prot; });
     relax(true,12);
-    sol=fits(cx,cy,hub,W,H);
+    sol=fits(cx,cy,hub,W,H,false);
   }
   if(!sol){ ROOT.classList.add("list-mode"); return; }
 
@@ -843,7 +844,7 @@ function ensureArcs(){
     arcEls[cat]=el;
   });
 }
-function solveArcs(cx,cy,W,H,boxes,hubBox){
+function solveArcs(cx,cy,W,H,boxes,hubBox,usePins){
   ensureArcs();
   var out=[], placed=[], allOk=true;
   SECTOR_ORDER.forEach(function(cat){
@@ -857,19 +858,6 @@ function solveArcs(cx,cy,W,H,boxes,hubBox){
 
     var o=(LAYOUT.arcs||{})[cat]||{};
     if(typeof o.rot==="number") rot=o.rot;
-    if(typeof o.fx==="number" && typeof o.fy==="number"){   /* hand-placed */
-      var pin={cat:cat,el:el,x:o.fx*W,y:o.fy*H,rot:rot};
-      placed.push(corners(pin.x,pin.y,lw,lh,rot));
-      out.push(pin);
-      return;
-    }
-
-    /* how far the cards reach in this direction */
-    var ux=Math.cos(mid*Math.PI/180), uy=Math.sin(mid*Math.PI/180), reach=0;
-    nodes.forEach(function(n){
-      var d=(n.x-cx)*ux+(n.y-cy)*uy;
-      if(d>reach) reach=d+Math.abs(n.w/2*ux)+Math.abs(n.h/2*uy);
-    });
 
     function clear(x,y){
       if(x-lw/2<8 || x+lw/2>W-8 || y-lh/2<6 || y+lh/2>H-6) return false;
@@ -879,6 +867,26 @@ function solveArcs(cx,cy,W,H,boxes,hubBox){
       for(var k=0;k<placed.length;k++) if(overlaps(box,placed[k])) return false;
       return true;
     }
+
+    /* A hand-placed label is honoured only while it still fits. Its saved spot
+       was chosen against a particular card arrangement; once the cards move
+       (a smaller window falls back to automatic placement) that spot can land
+       under a card, so fall through to the search and keep the rotation. */
+    if(usePins && typeof o.fx==="number" && typeof o.fy==="number"){
+      var px=o.fx*W, py=o.fy*H;
+      if(clear(px,py)){
+        placed.push(corners(px,py,lw,lh,rot));
+        out.push({cat:cat,el:el,x:px,y:py,rot:rot});
+        return;
+      }
+    }
+
+    /* how far the cards reach in this direction */
+    var ux=Math.cos(mid*Math.PI/180), uy=Math.sin(mid*Math.PI/180), reach=0;
+    nodes.forEach(function(n){
+      var d=(n.x-cx)*ux+(n.y-cy)*uy;
+      if(d>reach) reach=d+Math.abs(n.w/2*ux)+Math.abs(n.h/2*uy);
+    });
 
     var found=null, base=reach+30;
     for(var dr=0; dr<=300 && !found; dr+=8){
@@ -915,16 +923,19 @@ function cardBoxes(){
 }
 /* the whole picture fits only if the cards clear each other AND every label
    can be placed; returns the label solution, or null */
-function fits(cx,cy,hub,W,H){
+/* `usePins` is only true while the cards are still in their saved arrangement.
+   A hand-placed label was positioned against that arrangement, so once the
+   cards re-flow the pins are stale and the labels are solved from scratch. */
+function fits(cx,cy,hub,W,H,usePins){
   if(crowded(cx,cy,hub)) return null;
-  var sol=solveArcs(cx,cy,W,H,cardBoxes(),corners(cx,cy,hub.w,hub.h,0));
+  var sol=solveArcs(cx,cy,W,H,cardBoxes(),corners(cx,cy,hub.w,hub.h,0),usePins);
   return sol.ok ? sol : null;
 }
 function redrawArcs(){
   var W=stage.clientWidth,H=stage.clientHeight,cx=W/2,cy=H/2;
   var hubEl=document.querySelector(".hub");
   applyArcs(solveArcs(cx,cy,W,H,cardBoxes(),
-    corners(cx,cy,hubEl.offsetWidth,hubEl.offsetHeight,0)));
+    corners(cx,cy,hubEl.offsetWidth,hubEl.offsetHeight,0),true));
 }
 function paintArcs(){
   var as=arcsEl.querySelectorAll(".arc");
