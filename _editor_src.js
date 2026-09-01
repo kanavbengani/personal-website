@@ -156,7 +156,8 @@ function collect(){
   nodes.forEach(function(n){
     if(!n.pinned) return;
     cards[n.e.id]={fx:+(n.x/W).toFixed(4),fy:+(n.y/H).toFixed(4),
-                   w:n.el.offsetWidth,rot:+n.rot.toFixed(2)};
+                   w:Math.round(n.el.offsetWidth/A.cardScale()),
+                   rot:+n.rot.toFixed(2)};
   });
   var ctext={};
   nodes.forEach(function(n){

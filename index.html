@@ -96,24 +96,29 @@ a{color:inherit}
 .tip:hover .tipbox,.tip:focus-visible .tipbox{opacity:1;visibility:visible}
 
 /* ---------- cards ---------- */
-.card{position:absolute;z-index:3;width:238px;
+.card{position:absolute;z-index:3;width:clamp(178px,15.8vw,238px);
   background:var(--panel);border:1px solid var(--line);border-radius:9px;
-  padding:11px 13px;cursor:pointer;text-align:left;color:inherit;font:inherit;
-  display:grid;grid-template-columns:22px 1fr;gap:0 10px;align-items:center;
+  padding:clamp(8px,0.75vw,11px) clamp(9px,0.88vw,13px);
+  cursor:pointer;text-align:left;color:inherit;font:inherit;
+  display:grid;grid-template-columns:clamp(17px,1.5vw,22px) 1fr;
+  gap:0 clamp(7px,0.7vw,10px);align-items:center;
   box-shadow:0 1px 2px rgba(0,0,0,.03);
   transition:transform .22s cubic-bezier(.2,.7,.3,1),box-shadow .22s,border-color .18s,opacity .3s}
 .card:hover,.card:focus-visible{box-shadow:0 10px 26px rgba(0,0,0,.12);border-color:var(--muted);z-index:5}
-.card .mark{width:22px;height:22px;border-radius:5px;overflow:hidden;
+.card .mark{width:clamp(17px,1.5vw,22px);height:clamp(17px,1.5vw,22px);
+  border-radius:5px;overflow:hidden;
   background:var(--tile);border:1px solid var(--tile-line);display:flex;align-items:center;justify-content:center}
 .card .mark img{width:100%;height:100%;object-fit:contain;display:block}
-.card .nm{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:13.5px;
-  letter-spacing:-.016em;line-height:1.2;display:block}
-.card .rl{font-style:italic;font-weight:300;color:var(--muted);font-size:11.5px;
-  line-height:1.3;display:block;margin-top:1px}
-.card .meta{grid-column:2;display:flex;align-items:center;gap:7px;margin-top:5px}
+.card .nm{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;
+  font-size:clamp(11.5px,0.92vw,13.5px);letter-spacing:-.016em;line-height:1.2;display:block}
+.card .rl{font-style:italic;font-weight:300;color:var(--muted);
+  font-size:clamp(9.8px,0.78vw,11.5px);line-height:1.3;display:block;margin-top:1px}
+.card .meta{grid-column:2;display:flex;align-items:center;gap:clamp(5px,0.5vw,7px);
+  margin-top:clamp(3px,0.35vw,5px)}
 .card .dot{width:5px;height:5px;border-radius:50%;flex:none}
-.card .wh{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:9px;
-  color:var(--muted);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.card .wh{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  font-size:clamp(7.8px,0.62vw,9px);color:var(--muted);letter-spacing:.04em;
+  font-variant-numeric:tabular-nums}
 .card .live{margin-left:auto;font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;
   font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper);
   background:var(--ink);border-radius:99px;padding:2px 6px}
@@ -148,7 +153,7 @@ a{color:inherit}
 .arcs{position:absolute;inset:0;pointer-events:none;z-index:1}
 .arc{position:absolute;transform-origin:50% 50%;white-space:nowrap;
   font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;font-weight:700;
-  font-size:16px;letter-spacing:.09em;text-transform:uppercase;
+  font-size:clamp(12px,1.1vw,16px);letter-spacing:.09em;text-transform:uppercase;
   opacity:1;transition:opacity .25s}
 body.editing .arcs{pointer-events:auto}
 body.editing .arc{cursor:move;opacity:1;outline:1px dashed var(--line);outline-offset:6px}
@@ -644,6 +649,12 @@ ENTRIES.forEach(function(e){
 var stage=document.getElementById("stage"), wires=document.getElementById("wires");
 var SECTORS={};                       /* filled per layout, degrees */
 var ROOT=document.documentElement;
+/* Saved card widths are stored at full scale; multiply by the same factor the
+   CSS clamp applies so a hand-set width shrinks with everything else. */
+function cardScale(){
+  var W=stage.clientWidth||window.innerWidth;
+  return Math.max(178,Math.min(238,0.158*W))/238;
+}
 function hardSmall(){ return window.innerWidth<=900 || window.innerHeight<=600; }
 
 /* Exact overlap test for rotated rectangles (separating axis theorem).
@@ -727,7 +738,7 @@ function layout(){
     var rad=sl.deg*Math.PI/180;
     var rx=rxMin+(rxMax-rxMin)*sl.k, ry=ryMin+(ryMax-ryMin)*sl.k;
     var o=(LAYOUT.cards||{})[id];
-    if(o&&o.w) n.el.style.width=o.w+"px";
+    if(o&&o.w) n.el.style.width=Math.round(o.w*cardScale())+"px";
     n.w=n.el.offsetWidth; n.h=n.el.offsetHeight;
     n.deg=sl.deg;
     /* the automatic placement, kept as a fallback even when the card is pinned */
@@ -794,6 +805,11 @@ function layout(){
     nodes.forEach(function(n){ n.x=n.px; n.y=n.py; n.rot=n.prot; });
     relax(true,12);
     sol=fits(cx,cy,hub,W,H,false);
+  }
+  /* Cards that fit are what makes the graph worth showing. If only a label has
+     nowhere to go, hide that label rather than dropping to the list. */
+  if(!sol && !crowded(cx,cy,hub)){
+    sol=solveArcs(cx,cy,W,H,cardBoxes(),corners(cx,cy,hub.w,hub.h,0),false);
   }
   if(!sol){ ROOT.classList.add("list-mode"); return; }
 
@@ -907,7 +923,8 @@ function solveArcs(cx,cy,W,H,boxes,hubBox,usePins){
     }
     if(!found){
       allOk=false;
-      found={x:cx+ux*base, y:cy+uy*base};
+      out.push({cat:cat,el:el,x:0,y:0,rot:rot,hide:true});
+      return;
     }
     placed.push(corners(found.x,found.y,lw,lh,rot));
     out.push({cat:cat,el:el,x:found.x,y:found.y,rot:rot});
@@ -917,6 +934,8 @@ function solveArcs(cx,cy,W,H,boxes,hubBox,usePins){
 }
 function applyArcs(sol){
   sol.forEach(function(a){
+    a.el.hidden=!!a.hide;
+    if(a.hide) return;
     var bw=a.el.offsetWidth, bh=a.el.offsetHeight;
     a.el.style.left=Math.round(a.x-bw/2)+"px";
     a.el.style.top=Math.round(a.y-bh/2)+"px";
@@ -1134,6 +1153,7 @@ if(LOCAL){
     layout:layout, stage:stage, wires:wires, arcsEl:arcsEl,
     paintWires:paintWires, redrawArcs:redrawArcs, dlg:dlg, openDetail:openDetail,
     hub:{h1:hubH1, role:hubRole, bio:hubBio},
+    cardScale:cardScale,
     setEditing:function(v){ editing=!!v; }
   };
   var _s=document.createElement("script");
