@@ -123,6 +123,7 @@ def js_entries():
     return json.dumps(out, ensure_ascii=True, separators=(",",":"))
 
 HTML = """<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kanav Bengani</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -488,7 +489,9 @@ dialog[open]{animation:pop .18s cubic-bezier(.2,.7,.3,1)}
 <script>
 /* before first paint, so a small window never flashes the graph */
 (function(){var r=document.documentElement;
- if(window.innerWidth<=900||window.innerHeight<=600) r.classList.add("list-mode");})();
+ var coarse=window.matchMedia && window.matchMedia("(pointer:coarse)").matches;
+ var small=window.innerWidth<=900||window.innerHeight<=600;
+ if(small||(coarse&&Math.min(window.innerWidth,window.innerHeight)<=820)) r.classList.add("list-mode");})();
 </script>
 
 <main class="stage" id="stage">
@@ -780,7 +783,13 @@ function cardScale(){
   var W=stage.clientWidth||window.innerWidth;
   return Math.max(178,Math.min(238,0.158*W))/238;
 }
-function hardSmall(){ return window.innerWidth<=900 || window.innerHeight<=600; }
+function hardSmall(){
+  if(window.innerWidth<=900 || window.innerHeight<=600) return true;
+  /* a phone or small tablet always gets the list: the graph needs hover for
+     the link tooltips and a pointer fine enough to aim at a card */
+  var coarse=window.matchMedia && window.matchMedia("(pointer:coarse)").matches;
+  return !!coarse && Math.min(window.innerWidth,window.innerHeight)<=820;
+}
 
 /* Exact overlap test for rotated rectangles (separating axis theorem).
    A bounding-box test is far too loose for tilted cards and would drop a
