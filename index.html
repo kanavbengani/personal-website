@@ -724,6 +724,9 @@ function layout(){
     if(o&&o.w) n.el.style.width=o.w+"px";
     n.w=n.el.offsetWidth; n.h=n.el.offsetHeight;
     n.deg=sl.deg;
+    /* the automatic placement, kept as a fallback even when the card is pinned */
+    n.px=cx+Math.cos(rad)*rx; n.py=cy+Math.sin(rad)*ry;
+    n.prot=Math.max(-6,Math.min(6,Math.cos(rad)*6.5));
     if(o&&typeof o.fx==="number"&&typeof o.fy==="number"){
       n.pinned=true;
       n.x=o.fx*W; n.y=o.fy*H;
@@ -735,31 +738,51 @@ function layout(){
     }
   });
 
-  /* relaxation: separate overlapping cards, keep clear of the hub and the edges */
-  var pad=16;
-  for(var pass=0;pass<140;pass++){
-    for(var i=0;i<nodes.length;i++){
-      for(var j=i+1;j<nodes.length;j++){
-        var a=nodes[i],b2=nodes[j];
-        var dx=b2.x-a.x, dy=b2.y-a.y;
-        var ox=(a.w+b2.w)/2+pad-Math.abs(dx), oy=(a.h+b2.h)/2+pad-Math.abs(dy);
-        if(ox>0&&oy>0){
-          if(a.pinned&&b2.pinned) continue;
-          var wa=a.pinned?0:(b2.pinned?1:0.5), wb=b2.pinned?0:(a.pinned?1:0.5);
-          if(ox<oy){ var s1=(dx<0?-1:1)*ox; a.x-=s1*wa; b2.x+=s1*wb; }
-          else     { var s2=(dy<0?-1:1)*oy; a.y-=s2*wa; b2.y+=s2*wb; }
+  /* Relaxation: separate overlapping cards, keep clear of the hub and the edges.
+     `freeAll` ignores pinning, which is how a hand-placed layout re-flows on a
+     smaller screen instead of dropping straight to the list. */
+  function relax(freeAll, pad){
+    var loose=function(n){ return freeAll || !n.pinned; };
+    for(var pass=0;pass<140;pass++){
+      for(var i=0;i<nodes.length;i++){
+        for(var j=i+1;j<nodes.length;j++){
+          var a=nodes[i],b2=nodes[j];
+          var dx=b2.x-a.x, dy=b2.y-a.y;
+          var ox=(a.w+b2.w)/2+pad-Math.abs(dx), oy=(a.h+b2.h)/2+pad-Math.abs(dy);
+          if(ox>0&&oy>0){
+            var fa=loose(a), fb=loose(b2);
+            if(!fa&&!fb) continue;
+            var wa=fa?(fb?0.5:1):0, wb=fb?(fa?0.5:1):0;
+            if(ox<oy){ var s1=(dx<0?-1:1)*ox; a.x-=s1*wa; b2.x+=s1*wb; }
+            else     { var s2=(dy<0?-1:1)*oy; a.y-=s2*wa; b2.y+=s2*wb; }
+          }
         }
       }
-    }
-    for(var m=0;m<nodes.length;m++){
-      var n2=nodes[m];
-      if(n2.pinned) continue;
-      var hx=(hub.w+n2.w)/2+26-Math.abs(n2.x-cx), hy=(hub.h+n2.h)/2+18-Math.abs(n2.y-cy);
-      if(hx>0&&hy>0){
-        if(hx<hy) n2.x+=(n2.x<cx?-1:1)*hx; else n2.y+=(n2.y<cy?-1:1)*hy;
+      for(var m=0;m<nodes.length;m++){
+        var n2=nodes[m];
+        if(!loose(n2)) continue;
+        var hx=(hub.w+n2.w)/2+22-Math.abs(n2.x-cx), hy=(hub.h+n2.h)/2+16-Math.abs(n2.y-cy);
+        if(hx>0&&hy>0){
+          if(hx<hy) n2.x+=(n2.x<cx?-1:1)*hx; else n2.y+=(n2.y<cy?-1:1)*hy;
+        }
+        n2.x=Math.max(n2.w/2+14,Math.min(W-n2.w/2-14,n2.x));
+        n2.y=Math.max(n2.h/2+10,Math.min(H-n2.h/2-10,n2.y));
       }
-      n2.x=Math.max(n2.w/2+16,Math.min(W-n2.w/2-16,n2.x));
-      n2.y=Math.max(n2.h/2+10,Math.min(H-n2.h/2-10,n2.y));
+    }
+  }
+
+  /* Three chances to keep the graph before falling back to the list:
+     1. the pinned arrangement exactly as saved
+     2. the same arrangement, but every card free to be nudged
+     3. the automatic polar placement, ignoring the saved positions */
+  var saved=nodes.map(function(n){ return {x:n.x,y:n.y,rot:n.rot}; });
+  relax(false,16);
+  if(crowded(cx,cy,hub)){
+    nodes.forEach(function(n,i){ n.x=saved[i].x; n.y=saved[i].y; });
+    relax(true,14);
+    if(crowded(cx,cy,hub)){
+      nodes.forEach(function(n){ n.x=n.px; n.y=n.py; n.rot=n.prot; });
+      relax(true,12);
     }
   }
 
