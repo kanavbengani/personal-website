@@ -49,21 +49,25 @@ a{color:inherit}
 .wires line{stroke:var(--wire);stroke-width:1;transition:opacity .3s,stroke .3s}
 
 .hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:min(468px,80vw);text-align:center;z-index:2;pointer-events:none;
-  background:var(--panel);border:1px solid var(--hair);border-radius:16px;
-  padding:50px 34px 52px;box-shadow:0 2px 24px rgba(0,0,0,.05)}
+  /* the whole card scales with the viewport, which also frees space for the
+     constellation on smaller screens */
+  width:clamp(316px,31.5vw,468px);text-align:center;z-index:2;pointer-events:none;
+  background:var(--panel);border:1px solid var(--hair);border-radius:clamp(12px,1.1vw,16px);
+  padding:clamp(30px,3.4vw,50px) clamp(20px,2.3vw,34px) clamp(32px,3.5vw,52px);
+  box-shadow:0 2px 24px rgba(0,0,0,.05)}
 .corners{display:contents}
 .hub .ico{position:absolute;pointer-events:auto;
   display:inline-flex;align-items:center;justify-content:center;
-  width:38px;height:38px;border-radius:10px;color:var(--muted);
+  width:clamp(30px,2.6vw,38px);height:clamp(30px,2.6vw,38px);
+  border-radius:10px;color:var(--muted);
   background:none;border:1px solid transparent;padding:0;cursor:pointer;text-decoration:none;
   transition:color .16s,background .16s,border-color .16s}
 .hub .ico:hover{color:var(--ink);background:var(--hover);border-color:var(--line)}
-.hub .ico svg{width:23px;height:23px;display:block}
-.hub .ico.tl{top:11px;left:11px}
-.hub .ico.tr{top:11px;right:11px}
-.hub .ico.bl{bottom:11px;left:11px}
-.hub .ico.br{bottom:11px;right:11px}
+.hub .ico svg{width:clamp(18px,1.6vw,23px);height:clamp(18px,1.6vw,23px);display:block}
+.hub .ico.tl{top:clamp(8px,0.8vw,11px);left:clamp(8px,0.8vw,11px)}
+.hub .ico.tr{top:clamp(8px,0.8vw,11px);right:clamp(8px,0.8vw,11px)}
+.hub .ico.bl{bottom:clamp(8px,0.8vw,11px);left:clamp(8px,0.8vw,11px)}
+.hub .ico.br{bottom:clamp(8px,0.8vw,11px);right:clamp(8px,0.8vw,11px)}
 .hub .ico .lab{position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);
   background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:4px 8px;
   font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:9px;letter-spacing:.08em;
@@ -72,12 +76,14 @@ a{color:inherit}
 .hub .ico.bl .lab,.hub .ico.br .lab{top:auto;bottom:calc(100% + 6px)}
 .hub .ico:hover .lab,.hub .ico:focus-visible .lab{opacity:1;visibility:visible}
 .hub h1{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;font-weight:600;
-  font-size:clamp(30px,4.6vw,46px);letter-spacing:-.034em;line-height:1;margin:0}
-.hub .role-line{margin:11px 0 0;font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
-  font-weight:600;font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);
-  pointer-events:auto}
+  font-size:clamp(25px,3.1vw,46px);letter-spacing:-.034em;line-height:1;margin:0}
+.hub .role-line{margin:clamp(7px,0.8vw,11px) 0 0;
+  font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+  font-weight:600;font-size:clamp(9.5px,0.82vw,12px);letter-spacing:.15em;
+  text-transform:uppercase;color:var(--muted);pointer-events:auto}
 .hub .role-line .tip{color:var(--ink)}
-.hub p.bio{margin:13px auto 0;max-width:37ch;color:var(--ink-2);font-weight:500;font-size:15.5px;
+.hub p.bio{margin:clamp(9px,0.95vw,13px) auto 0;max-width:37ch;color:var(--ink-2);
+  font-weight:500;font-size:clamp(12.5px,1.06vw,15.5px);
   line-height:1.5;text-wrap:balance;pointer-events:auto}
 .hub em{font-style:italic;color:var(--ink)}
 .tip{position:relative;text-decoration:none;border-bottom:1px dotted var(--muted)}
@@ -404,7 +410,7 @@ var CATS = [["experience", "Work"], ["project", "Projects"], ["research", "Resea
 var SECTOR_ORDER = ["experience", "education", "research", "project"];
 var KEYS = {"experience": "w", "project": "a", "research": "s", "education": "d"};
 var ORDER = ["ballboy", "hubspot", "capitalone", "klaviyo", "fidelity", "jnj", "neu", "tams", "factevo", "shriners", "reversi", "reddit"];
-var LAYOUT = {"cards": {"hubspot": {"fx": 0.5671, "fy": 0.2018, "w": 194, "rot": 1.52}, "capitalone": {"fx": 0.6874, "fy": 0.2854, "w": 202, "rot": 4.28}, "klaviyo": {"fx": 0.7747, "fy": 0.4045, "w": 201, "rot": 6}, "fidelity": {"fx": 0.7332, "fy": 0.5316, "w": 202, "rot": 6}, "jnj": {"fx": 0.7332, "fy": 0.6674, "w": 182, "rot": 4.89}, "ballboy": {"fx": 0.4273, "fy": 0.279, "w": 193, "rot": -1.59}, "reddit": {"fx": 0.2645, "fy": 0.2779, "w": 229, "rot": -4.89}, "reversi": {"fx": 0.2466, "fy": 0.4089, "w": 150, "rot": -6}, "factevo": {"fx": 0.2721, "fy": 0.7569, "w": 198, "rot": -5.67}, "shriners": {"fx": 0.2703, "fy": 0.5989, "w": 181, "rot": -6}, "neu": {"fx": 0.4592, "fy": 0.7356, "w": 215, "rot": -5.27}, "tams": {"fx": 0.6049, "fy": 0.8069, "w": 210, "rot": 6.46}}, "arcs": {"research": {"fx": 0.1644, "fy": 0.6954, "rot": -0.2}, "project": {"fx": 0.2497, "fy": 0.202, "rot": 0}, "experience": {"rot": 0.2, "fx": 0.8211, "fy": 0.2795}, "education": {"fx": 0.5039, "fy": 0.8679, "rot": 360}}};
+var LAYOUT = {"cards": {"hubspot": {"fx": 0.571, "fy": 0.1284, "w": 194, "rot": 1.52}, "capitalone": {"fx": 0.6874, "fy": 0.2632, "w": 202, "rot": 4.28}, "klaviyo": {"fx": 0.8132, "fy": 0.4088, "w": 201, "rot": 6}, "fidelity": {"fx": 0.7891, "fy": 0.5393, "w": 202, "rot": 6}, "jnj": {"fx": 0.7915, "fy": 0.6995, "w": 182, "rot": 4.89}, "ballboy": {"fx": 0.4284, "fy": 0.2388, "w": 193, "rot": -1.59}, "reddit": {"fx": 0.2436, "fy": 0.2375, "w": 229, "rot": -4.89}, "reversi": {"fx": 0.2243, "fy": 0.4064, "w": 150, "rot": -6}, "factevo": {"fx": 0.2499, "fy": 0.7659, "w": 198, "rot": -5.67}, "shriners": {"fx": 0.2247, "fy": 0.6105, "w": 181, "rot": -6}, "neu": {"fx": 0.4415, "fy": 0.7991, "w": 215, "rot": -5.27}, "tams": {"fx": 0.6227, "fy": 0.8069, "w": 210, "rot": 6.46}}, "arcs": {"research": {"fx": 0.0817, "fy": 0.7222, "rot": -0.2}, "project": {"fx": 0.2497, "fy": 0.202, "rot": 0}, "experience": {"rot": 0.2, "fx": 0.8233, "fy": 0.2654}, "education": {"fx": 0.5237, "fy": 0.9309, "rot": 360}}};
 var CONTENT = {"hub": {"name": "Kanav Bengani", "role": "Software Engineer @ <a class=\"tip\" href=\"#hubspot\" data-card=\"hubspot\">HubSpot<span class=\"tipbox\">See the HubSpot card</span></a>", "bio": "I like building backend systems, tinkering with the buzzword that is AI,\n      and occasionally making things people actually use \u2014\n      like <a class=\"tip\" href=\"#ballboy\" data-card=\"ballboy\"><em>Ballboy</em><span class=\"tipbox\">See the Ballboy card</span></a>."}, "cards": {"hubspot": {"name": "HubSpot", "role": "Software Engineer", "when": "Dec 2025 \u2014 now"}, "capitalone": {"name": "Capital One", "role": "Software Engineering Intern", "when": "Jun \u2014 Aug 2025"}, "klaviyo": {"name": "Klaviyo", "role": "Software Engineering Co-op", "when": "Jan \u2014 May 2025"}, "fidelity": {"name": "Fidelity Investments", "role": "Software Engineering Intern", "when": "Jun \u2014 Aug 2024"}, "jnj": {"name": "Johnson &amp; Johnson", "role": "Data Science Co-op", "when": "Jan \u2014 May 2024"}, "ballboy": {"name": "Ballboy<br>", "role": "Fantasy tennis", "when": "May 2026 \u2014 now"}, "reddit": {"name": "Reddit Sentiment Analysis", "role": "Agentic application", "when": "Nov 2024"}, "reversi": {"name": "Reversi", "role": "Java video game", "when": "Nov 2023"}, "factevo": {"name": "FactEvo Optimization", "role": "Evolutionary computing", "when": "Mar \u2014 Jun 2024"}, "shriners": {"name": "Shriners Children's", "role": "Biomedical AI", "when": "2020 \u2014 2022"}, "neu": {"name": "Northeastern University", "role": "B.S. Data Science, Minor in Mathematics", "when": "2022 \u2014 2025"}, "tams": {"name": "Texas Academy of Mathematics &amp; Science", "role": "Computer Science Track", "when": "2020 \u2014 2022"}}};
 var LOCAL = ["localhost","127.0.0.1","::1"].indexOf(location.hostname)>=0;
 </script>

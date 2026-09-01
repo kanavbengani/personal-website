@@ -173,21 +173,25 @@ a{color:inherit}
 .wires line{stroke:var(--wire);stroke-width:1;transition:opacity .3s,stroke .3s}
 
 .hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:min(468px,80vw);text-align:center;z-index:2;pointer-events:none;
-  background:var(--panel);border:1px solid var(--hair);border-radius:16px;
-  padding:50px 34px 52px;box-shadow:0 2px 24px rgba(0,0,0,.05)}
+  /* the whole card scales with the viewport, which also frees space for the
+     constellation on smaller screens */
+  width:clamp(316px,31.5vw,468px);text-align:center;z-index:2;pointer-events:none;
+  background:var(--panel);border:1px solid var(--hair);border-radius:clamp(12px,1.1vw,16px);
+  padding:clamp(30px,3.4vw,50px) clamp(20px,2.3vw,34px) clamp(32px,3.5vw,52px);
+  box-shadow:0 2px 24px rgba(0,0,0,.05)}
 .corners{display:contents}
 .hub .ico{position:absolute;pointer-events:auto;
   display:inline-flex;align-items:center;justify-content:center;
-  width:38px;height:38px;border-radius:10px;color:var(--muted);
+  width:clamp(30px,2.6vw,38px);height:clamp(30px,2.6vw,38px);
+  border-radius:10px;color:var(--muted);
   background:none;border:1px solid transparent;padding:0;cursor:pointer;text-decoration:none;
   transition:color .16s,background .16s,border-color .16s}
 .hub .ico:hover{color:var(--ink);background:var(--hover);border-color:var(--line)}
-.hub .ico svg{width:23px;height:23px;display:block}
-.hub .ico.tl{top:11px;left:11px}
-.hub .ico.tr{top:11px;right:11px}
-.hub .ico.bl{bottom:11px;left:11px}
-.hub .ico.br{bottom:11px;right:11px}
+.hub .ico svg{width:clamp(18px,1.6vw,23px);height:clamp(18px,1.6vw,23px);display:block}
+.hub .ico.tl{top:clamp(8px,0.8vw,11px);left:clamp(8px,0.8vw,11px)}
+.hub .ico.tr{top:clamp(8px,0.8vw,11px);right:clamp(8px,0.8vw,11px)}
+.hub .ico.bl{bottom:clamp(8px,0.8vw,11px);left:clamp(8px,0.8vw,11px)}
+.hub .ico.br{bottom:clamp(8px,0.8vw,11px);right:clamp(8px,0.8vw,11px)}
 .hub .ico .lab{position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);
   background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:4px 8px;
   font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:9px;letter-spacing:.08em;
@@ -196,12 +200,14 @@ a{color:inherit}
 .hub .ico.bl .lab,.hub .ico.br .lab{top:auto;bottom:calc(100% + 6px)}
 .hub .ico:hover .lab,.hub .ico:focus-visible .lab{opacity:1;visibility:visible}
 .hub h1{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;font-weight:600;
-  font-size:clamp(30px,4.6vw,46px);letter-spacing:-.034em;line-height:1;margin:0}
-.hub .role-line{margin:11px 0 0;font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
-  font-weight:600;font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);
-  pointer-events:auto}
+  font-size:clamp(25px,3.1vw,46px);letter-spacing:-.034em;line-height:1;margin:0}
+.hub .role-line{margin:clamp(7px,0.8vw,11px) 0 0;
+  font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+  font-weight:600;font-size:clamp(9.5px,0.82vw,12px);letter-spacing:.15em;
+  text-transform:uppercase;color:var(--muted);pointer-events:auto}
 .hub .role-line .tip{color:var(--ink)}
-.hub p.bio{margin:13px auto 0;max-width:37ch;color:var(--ink-2);font-weight:500;font-size:15.5px;
+.hub p.bio{margin:clamp(9px,0.95vw,13px) auto 0;max-width:37ch;color:var(--ink-2);
+  font-weight:500;font-size:clamp(12.5px,1.06vw,15.5px);
   line-height:1.5;text-wrap:balance;pointer-events:auto}
 .hub em{font-style:italic;color:var(--ink)}
 .tip{position:relative;text-decoration:none;border-bottom:1px dotted var(--muted)}
