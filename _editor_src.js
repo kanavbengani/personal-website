@@ -8,7 +8,7 @@ if(!A){ console.warn("editor.js: page hook missing"); return; }
 
 var nodes=A.nodes, nodeById=A.nodeById, LAYOUT=A.LAYOUT, CONTENT=A.CONTENT,
   layout=A.layout, stage=A.stage, wires=A.wires, arcsEl=A.arcsEl,
-  paintWires=A.paintWires, drawArcs=A.drawArcs, dlg=A.dlg, openDetail=A.openDetail,
+  paintWires=A.paintWires, redrawArcs=A.redrawArcs, dlg=A.dlg, openDetail=A.openDetail,
   hubH1=A.hub.h1, hubRole=A.hub.role, hubBio=A.hub.bio;
 var editing=false;
 
@@ -113,10 +113,7 @@ function redrawWires(){
   });
   wires.innerHTML=out; paintWires();
 }
-function drawArcsNow(){
-  var W=stage.clientWidth,H=stage.clientHeight;
-  drawArcs(W/2,H/2,W,H);
-}
+function drawArcsNow(){ redrawArcs(); }
 
 /* --- drag the section labels; hold shift to rotate --- */
 var adrag=null;

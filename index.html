@@ -777,14 +777,18 @@ function layout(){
      3. the automatic polar placement, ignoring the saved positions */
   var saved=nodes.map(function(n){ return {x:n.x,y:n.y,rot:n.rot}; });
   relax(false,16);
-  if(crowded(cx,cy,hub)){
+  var sol=fits(cx,cy,hub,W,H);
+  if(!sol){
     nodes.forEach(function(n,i){ n.x=saved[i].x; n.y=saved[i].y; });
     relax(true,14);
-    if(crowded(cx,cy,hub)){
-      nodes.forEach(function(n){ n.x=n.px; n.y=n.py; n.rot=n.prot; });
-      relax(true,12);
-    }
+    sol=fits(cx,cy,hub,W,H);
   }
+  if(!sol){
+    nodes.forEach(function(n){ n.x=n.px; n.y=n.py; n.rot=n.prot; });
+    relax(true,12);
+    sol=fits(cx,cy,hub,W,H);
+  }
+  if(!sol){ ROOT.classList.add("list-mode"); return; }
 
   /* Where a ray leaves a box of half-size (hw,hh) that is rotated by `deg`.
      The direction is taken into the box's own frame first, otherwise a tilted
@@ -819,53 +823,108 @@ function layout(){
   });
   wires.innerHTML=svg;
   paintWires();
-  drawArcs(cx,cy,W,H);
-
-  /* no room to lay this out cleanly -> show the list instead */
-  if(crowded(cx,cy,hub)) ROOT.classList.add("list-mode");
+  applyArcs(sol);
 }
 
-/* Each sector gets its name set just outside the ring, rotated to follow the arc. */
+/* Section labels are part of the layout, not an afterthought. Each one is
+   searched outward along its sector and slid along the arc until it clears
+   every card, the hub and its neighbours; if none of them can be placed, the
+   layout counts as not fitting. */
 var arcsEl=document.getElementById("arcs");
-function drawArcs(cx,cy,W,H){
-  arcsEl.innerHTML="";
+var arcEls={};
+function ensureArcs(){
   SECTOR_ORDER.forEach(function(cat){
-    var s=SECTORS[cat]; if(!s) return;
-    var mid=(s.from+s.to)/2, rad=mid*Math.PI/180;
-    var ux=Math.cos(rad), uy=Math.sin(rad);
-    /* sit beyond the furthest card along this direction */
-    var reach=0;
-    nodes.forEach(function(n){
-      var d=(n.x-cx)*ux+(n.y-cy)*uy;
-      if(d>reach){
-        var corner=Math.abs(n.w/2*ux)+Math.abs(n.h/2*uy);
-        reach=Math.max(reach,d+corner);
-      }
-    });
-    var o=(LAYOUT.arcs||{})[cat]||{};
-    var pad=(typeof o.pad==="number")?o.pad:38;
-    var x=cx+ux*(reach+pad), y=cy+uy*(reach+pad);
-    var rot=mid+90;                                  /* tangent to the circle */
-    while(rot>180) rot-=360; while(rot<-180) rot+=360;
-    if(rot>90||rot<-90) rot+=180;                    /* never upside down */
+    if(arcEls[cat]) return;
     var el=document.createElement("span");
     el.className="arc"; el.dataset.cat=cat;
     el.innerHTML='<span class="arc-t"></span><span class="arc-h"></span>';
     el.firstChild.textContent=catLabel(cat);
     arcsEl.appendChild(el);
-    var bw=el.offsetWidth, bh=el.offsetHeight;
-    var pinned=(typeof o.fx==="number"&&typeof o.fy==="number");
-    if(pinned){ x=o.fx*W; y=o.fy*H; }
+    arcEls[cat]=el;
+  });
+}
+function solveArcs(cx,cy,W,H,boxes,hubBox){
+  ensureArcs();
+  var out=[], placed=[], allOk=true;
+  SECTOR_ORDER.forEach(function(cat){
+    var sec=SECTORS[cat], el=arcEls[cat];
+    if(!sec) return;
+    var lw=el.offsetWidth, lh=el.offsetHeight;
+    var mid=(sec.from+sec.to)/2;
+    var rot=mid+90;
+    while(rot>180) rot-=360; while(rot<-180) rot+=360;
+    if(rot>90||rot<-90) rot+=180;                    /* never upside down */
+
+    var o=(LAYOUT.arcs||{})[cat]||{};
     if(typeof o.rot==="number") rot=o.rot;
-    if(!pinned){                                     /* keep auto labels on stage */
-      x=Math.max(bw/2+10,Math.min(W-bw/2-10,x));
-      y=Math.max(bh/2+8,Math.min(H-bh/2-8,y));
+    if(typeof o.fx==="number" && typeof o.fy==="number"){   /* hand-placed */
+      var pin={cat:cat,el:el,x:o.fx*W,y:o.fy*H,rot:rot};
+      placed.push(corners(pin.x,pin.y,lw,lh,rot));
+      out.push(pin);
+      return;
     }
-    el.style.left=Math.round(x-bw/2)+"px";
-    el.style.top=Math.round(y-bh/2)+"px";
-    el.style.transform="rotate("+rot.toFixed(1)+"deg)";
+
+    /* how far the cards reach in this direction */
+    var ux=Math.cos(mid*Math.PI/180), uy=Math.sin(mid*Math.PI/180), reach=0;
+    nodes.forEach(function(n){
+      var d=(n.x-cx)*ux+(n.y-cy)*uy;
+      if(d>reach) reach=d+Math.abs(n.w/2*ux)+Math.abs(n.h/2*uy);
+    });
+
+    function clear(x,y){
+      if(x-lw/2<8 || x+lw/2>W-8 || y-lh/2<6 || y+lh/2>H-6) return false;
+      var box=corners(x,y,lw,lh,rot);
+      if(overlaps(box,hubBox)) return false;
+      for(var i=0;i<boxes.length;i++) if(overlaps(box,boxes[i])) return false;
+      for(var k=0;k<placed.length;k++) if(overlaps(box,placed[k])) return false;
+      return true;
+    }
+
+    var found=null, base=reach+30;
+    for(var dr=0; dr<=240 && !found; dr+=8){
+      for(var da=0; da<=18 && !found; da+=3){
+        var signs = da===0 ? [1] : [1,-1];
+        for(var q=0;q<signs.length && !found;q++){
+          var a=(mid+signs[q]*da)*Math.PI/180;
+          var x=cx+Math.cos(a)*(base+dr), y=cy+Math.sin(a)*(base+dr);
+          if(clear(x,y)) found={x:x,y:y};
+        }
+      }
+    }
+    if(!found){
+      allOk=false;
+      found={x:cx+ux*base, y:cy+uy*base};
+    }
+    placed.push(corners(found.x,found.y,lw,lh,rot));
+    out.push({cat:cat,el:el,x:found.x,y:found.y,rot:rot});
+  });
+  out.ok=allOk;
+  return out;
+}
+function applyArcs(sol){
+  sol.forEach(function(a){
+    var bw=a.el.offsetWidth, bh=a.el.offsetHeight;
+    a.el.style.left=Math.round(a.x-bw/2)+"px";
+    a.el.style.top=Math.round(a.y-bh/2)+"px";
+    a.el.style.transform="rotate("+a.rot.toFixed(1)+"deg)";
   });
   paintArcs();
+}
+function cardBoxes(){
+  return nodes.map(function(n){ return corners(n.x,n.y,n.w,n.h,n.rot); });
+}
+/* the whole picture fits only if the cards clear each other AND every label
+   can be placed; returns the label solution, or null */
+function fits(cx,cy,hub,W,H){
+  if(crowded(cx,cy,hub)) return null;
+  var sol=solveArcs(cx,cy,W,H,cardBoxes(),corners(cx,cy,hub.w,hub.h,0));
+  return sol.ok ? sol : null;
+}
+function redrawArcs(){
+  var W=stage.clientWidth,H=stage.clientHeight,cx=W/2,cy=H/2;
+  var hubEl=document.querySelector(".hub");
+  applyArcs(solveArcs(cx,cy,W,H,cardBoxes(),
+    corners(cx,cy,hubEl.offsetWidth,hubEl.offsetHeight,0)));
 }
 function paintArcs(){
   var as=arcsEl.querySelectorAll(".arc");
@@ -1056,7 +1115,7 @@ if(LOCAL){
   window.__kb={
     nodes:nodes, nodeById:nodeById, LAYOUT:LAYOUT, CONTENT:CONTENT,
     layout:layout, stage:stage, wires:wires, arcsEl:arcsEl,
-    paintWires:paintWires, drawArcs:drawArcs, dlg:dlg, openDetail:openDetail,
+    paintWires:paintWires, redrawArcs:redrawArcs, dlg:dlg, openDetail:openDetail,
     hub:{h1:hubH1, role:hubRole, bio:hubBio},
     setEditing:function(v){ editing=!!v; }
   };
