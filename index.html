@@ -80,8 +80,12 @@ a{color:inherit}
 .hub h1{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;font-weight:600;
   font-size:clamp(25px,3.1vw,46px);letter-spacing:-.034em;line-height:1;margin:0}
 .name-wrap{position:relative;display:inline-block;pointer-events:auto}
-.hub h1{cursor:pointer}
-.hub h1:hover{opacity:.86}
+.hub h1{cursor:pointer;
+  text-decoration:underline;text-decoration-style:dotted;
+  text-decoration-color:var(--muted);text-decoration-thickness:2px;
+  text-underline-offset:clamp(6px,0.62vw,10px);
+  transition:text-decoration-color .16s}
+.hub h1:hover,.hub h1:focus-visible{text-decoration-color:var(--ink)}
 .name-tip{
   position:absolute;left:50%;bottom:calc(100% + 9px);transform:translateX(-50%) translateY(-3px);
   display:flex;align-items:baseline;gap:8px;white-space:nowrap;
@@ -99,7 +103,7 @@ a{color:inherit}
   opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);
 }
 body.editing .name-tip{display:none}
-body.editing .hub h1{cursor:text}
+body.editing .hub h1{cursor:text;text-decoration:none}
 .hub .role-line{margin:clamp(7px,0.8vw,11px) 0 0;
   font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
   font-weight:600;font-size:clamp(9.5px,0.82vw,12px);letter-spacing:.15em;
