@@ -1,4 +1,4 @@
-# kanavbengani.com
+# www.kanavbengani.com
 
 A single-page personal site. Cards orbit a centre card: **angle** encodes
 category, **distance** encodes recency. `index.html` is self-contained — logos,
