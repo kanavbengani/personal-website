@@ -5,6 +5,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script data-goatcounter="https://kanavbengani.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 
 <style>
 :root{
@@ -458,6 +460,17 @@ var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 var editing = false;
 var root = document.documentElement;
 
+/* ---------------- analytics ----------------
+   GoatCounter counts the pageview itself; track() is only for clicks. LOCAL keeps
+   editing sessions out of the stats, and a blocked or missing script is a no-op,
+   so nothing here can break the page. */
+function track(path, title){
+  if(LOCAL) return;
+  var g = window.goatcounter;
+  if(!g || typeof g.count !== "function") return;
+  g.count({path:path, title:title, event:true});
+}
+
 /* ---------------- theme ---------------- */
 var themeBtn = document.getElementById("themeBtn");
 function curTheme(){ return root.getAttribute("data-theme")==="dark" ? "dark" : "light"; }
@@ -533,6 +546,7 @@ function editHTML(e){
 function catLabel(c){ for(var i=0;i<CATS.length;i++) if(CATS[i][0]===c) return CATS[i][1]; return c; }
 function openDetail(id, origin, asEdit){
   var e=byId(id); if(!e) return;
+  if(!asEdit) track("card/"+id, "Card: "+id);
   lastFocus=origin||null;
   dlgBody.innerHTML=asEdit?editHTML(e):detailHTML(e);
   if(asEdit) wireEditor(e);
@@ -1014,7 +1028,10 @@ CATS.forEach(function(c){
   b.type="button"; b.dataset.cat=c[0]; b.setAttribute("aria-pressed","false");
   b.innerHTML='<span class="sw" style="background:var(--c-'+c[0]+')"></span>'+c[1]+
     '<kbd>'+KEYS[c[0]].toUpperCase()+'</kbd>';
-  b.addEventListener("click",function(){ setFilter(active===c[0]?null:c[0]); });
+  b.addEventListener("click",function(){
+    if(active!==c[0]) track("filter/"+c[0], "Filter: "+c[1]);
+    setFilter(active===c[0]?null:c[0]);
+  });
   legend.appendChild(b);
 });
 var clearBtn=document.createElement("button");
@@ -1116,7 +1133,16 @@ function copyEmail(){
     }catch(e){ done(false); }
   }
 }
-nameEl.addEventListener("click",function(){ if(!editing) copyEmail(); });
+/* one delegated listener covers the social icons, the card link tips and the
+   links inside a detail modal &#8212; counted by host, never by full URL */
+document.addEventListener("click",function(ev){
+  var a = ev.target.closest && ev.target.closest('a[href^="http"]');
+  if(!a) return;
+  var host = (a.hostname||"").replace(/^www\./,"");
+  if(host && host !== location.hostname) track("out/"+host, "Outbound: "+host);
+});
+
+nameEl.addEventListener("click",function(){ if(!editing){ track("email/copy", "Email copied"); copyEmail(); } });
 nameEl.addEventListener("keydown",function(ev){
   if(editing) return;
   if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); copyEmail(); }
@@ -1152,9 +1178,12 @@ function pdfBytes(){
   return out;
 }
 document.getElementById("resumeBtn").addEventListener("click",function(){
+  track("resume/open", "Resume opened");
   if(rDlg.showModal) rDlg.showModal(); else rDlg.setAttribute("open","");
   sharpen();
 });
+dlBtn.addEventListener("click",function(){ track("resume/download", "Resume downloaded"); });
+openBtn.addEventListener("click",function(){ track("resume/new-tab", "Resume in new tab"); });
 document.getElementById("resumeClose").addEventListener("click",function(){
   rDlg.close ? rDlg.close() : rDlg.removeAttribute("open");
 });

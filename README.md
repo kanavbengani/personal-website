@@ -19,5 +19,11 @@ or open a card's pencil for its modal content. **Save** writes `layout.json`
 **Keys** — `W` work · `A` projects · `S` research · `D` education; again or
 `Esc` to clear.
 
+**Analytics** — GoatCounter, no cookies. Stats at
+`kanavbengani.goatcounter.com`; set `GC_CODE = ""` in `build.py` to drop the tag
+entirely. Pageviews are automatic; `track()` counts card opens, résumé
+open/download, category filters and outbound clicks by host. Localhost never
+reports, so events only show up from the deployed site.
+
 `build.py` generates `index.html` and `editor.js`; edit `build.py` and
 `_editor_src.js`, not the output.
