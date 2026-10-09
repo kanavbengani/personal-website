@@ -8,12 +8,27 @@
     "hubspot": {
       "name": "HubSpot",
       "role": "Software Engineer",
-      "when": "Dec 2025 — now"
+      "when": "Dec 2025 — now",
+      "place": "Cambridge, MA",
+      "stack": "Java · React · SQL · MCP · Agents",
+      "pts": [
+        "Built <b>agentic search</b> to enhance discovery of <b>6,000+</b> published Marketplace integrations using MCP tools and skills.",
+        "Implemented a self-serve platform serving <b>80K+ </b>users/week allowing marketing teams to update site content with no engineering support; designed SQL-backed database models, low-latency RPCs, and React UI components.",
+        "Resolved customer queries, high-severity incidents, and technical alerts (up to <b>40/week</b>) on a 24/7 on-call rotation."
+      ],
+      "links": []
     },
     "capitalone": {
       "name": "Capital One",
       "role": "Software Engineering Intern",
-      "when": "Jun — Aug 2025"
+      "when": "Jun — Aug 2025",
+      "place": "",
+      "stack": "Flask · React · OCR · Python",
+      "pts": [
+        "Assessed image quality for over <b>100K documents/day</b> — government-issued IDs, W-2s, and bank statements.",
+        "Extracted image data with <b>85% accuracy</b> using OCR and surfaced it on a web app created using Flask and React."
+      ],
+      "links": []
     },
     "klaviyo": {
       "name": "Klaviyo",
@@ -27,33 +42,95 @@
     },
     "jnj": {
       "name": "Johnson &amp; Johnson",
-      "role": "Data Science Co-op",
+      "role": "Machine Learning Co-op",
       "when": "Jan — May 2024"
     },
     "ballboy": {
       "name": "Ballboy<br>",
       "role": "Fantasy tennis",
-      "when": "May 2026 — now"
+      "when": "",
+      "place": "",
+      "stack": "React Native · Django · Redis · Supabase · Cloudflare",
+      "pts": [
+        "Founded a platform launched on <b>iOS</b> with <b>1.5K+ impressions</b> where users join fantasy leagues following live tennis.",
+        "Led engineering using tools like <b>Django</b>, <b>Redis</b>, React Native, and Cloudflare to ensure a <b>low-latency, real-time</b> app.",
+        "Achieved <b>100K+ interactions</b> while building a social media following across platforms — Instagram and TikTok."
+      ],
+      "links": [
+        [
+          "App Store",
+          "https://apps.apple.com/app/ballboy-tennis/id6765790453"
+        ],
+        [
+          "GitHub",
+          "https://github.com/kanavbengani/tennis_fantasy"
+        ]
+      ]
     },
     "reddit": {
       "name": "Reddit Sentiment Analysis",
-      "role": "Agentic application",
-      "when": "Nov 2024"
+      "role": "Agentic chatbot",
+      "when": "",
+      "place": "",
+      "stack": "RAG · BERT · Llama 3.1 8B · PyTorch",
+      "pts": [
+        "Fine-tuned an <b>LLM</b> that constructs sentiment from the respective subreddit, given a natural language query.",
+        "Parsed and filtered context using <b>RAG</b> and a BERT classifier; derived sentiment using the Meta Llama 3.1 8B model."
+      ],
+      "links": [
+        [
+          "GitHub",
+          "https://github.com/zatchet/university-opinion-mining"
+        ]
+      ]
     },
-    "reversi": {
-      "name": "Reversi",
-      "role": "Java video game",
-      "when": "Nov 2023"
+    "invariance": {
+      "name": "Invariance",
+      "role": "AI-governed site customization",
+      "when": "",
+      "place": "",
+      "stack": "TypeScript · React · Node.js · LLMs",
+      "pts": [
+        "Architected an <b>SDK</b> that allows live UI restyling and restricted backend updates with a plain-English request per user.",
+        "Looped LLM generation against an automated verifier and <b>LLM-as-a-judge</b> until they clear developer-set invariants.",
+        "Devised a developer console to track website modification analytics, conflict resolutions, and end-user <b>versioning</b>."
+      ],
+      "links": [
+        [
+          "GitHub",
+          "https://github.com/anuraagkolli/invariance"
+        ]
+      ]
     },
     "factevo": {
       "name": "FactEvo Optimization",
       "role": "Evolutionary computing",
-      "when": "Mar — Jun 2024"
+      "when": "",
+      "place": "",
+      "stack": "Evolutionary computing · Python",
+      "pts": [
+        "Utilized natural-based <b>evolutionary computing</b> to solve a university course scheduling optimization problem.",
+        "Ran <b>100K generations</b> for natural selection to result in a pareto-optimal, i.e. non-dominated set of solutions."
+      ],
+      "links": []
     },
     "shriners": {
       "name": "Shriners Children's",
       "role": "Biomedical AI",
-      "when": "2020 — 2022"
+      "when": "",
+      "place": "",
+      "stack": "Autoencoders · Python",
+      "pts": [
+        "Improved surgical outcomes for cerebral palsy patients by developing an index with a predictive <b>autoencoder</b> model.",
+        "<b>Published</b> in the Journal of Biomechanics and presented posters at the GCMAS and ORS conferences."
+      ],
+      "links": [
+        [
+          "Publication",
+          "https://pubmed.ncbi.nlm.nih.gov/38669795/"
+        ]
+      ],
+      "cite": "Wang SJ, Tabashum T, Kruger KM, et al., <b>Bengani K</b>, Albert MV. “Creating an autoencoder single summary metric to assess gait quality to compare surgical outcomes in children with cerebral palsy: The Shriners Gait Index (SGI).” <i>Journal of Biomechanics</i> 168:112092, May 2024."
     },
     "neu": {
       "name": "Northeastern University",

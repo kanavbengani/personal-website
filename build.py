@@ -34,13 +34,14 @@ M = "—"
 DATA = [
  dict(id="hubspot", cat="experience", logo="hubspot", now=True,
    name="HubSpot", role="Software Engineer", when="Dec 2025 " + M + " now", place="Cambridge, MA",
-   pts=["Built <b>agentic search</b> to enhance discovery and conversion of Marketplace integrations using <b>MCP tools</b> and skills.",
-        "Devised a platform with <b>80k+ users/week</b> with <b>Java</b> + React allowing marketing to customize Marketplace content."],
-   stack="Java · React · MCP · Agents"),
+   pts=["Built <b>agentic search</b> to enhance discovery of <b>6,000+</b> published Marketplace integrations using <b>MCP tools</b> and skills.",
+        "Implemented a self-serve platform serving <b>80K+ users/week</b> allowing marketing teams to update site content with no engineering support; designed <b>SQL</b>-backed database models, low-latency RPCs, and <b>React</b> UI components.",
+        "Resolved customer queries, high-severity incidents, and technical alerts (up to <b>40/week</b>) on a 24/7 on-call rotation."],
+   stack="Java · React · SQL · MCP · Agents"),
  dict(id="capitalone", cat="experience", logo="capitalone",
    name="Capital One", role="Software Engineering Intern", when="Jun " + M + " Aug 2025", place="",
-   pts=["Created a web app using <b>Flask</b> APIs and a React frontend that extracts image data with <b>85% accuracy</b> using <b>OCR</b>.",
-        "Assessed image quality for over <b>100,000 documents/day</b> " + M + " government-issued IDs, W-2s, and bank statements."],
+   pts=["Assessed image quality for over <b>100K documents/day</b> " + M + " government-issued IDs, W-2s, and bank statements.",
+        "Extracted image data with <b>85% accuracy</b> using <b>OCR</b> and surfaced it on a web app created using <b>Flask</b> and React."],
    stack="Flask · React · OCR · Python"),
  dict(id="klaviyo", cat="experience", logo="klaviyo",
    name="Klaviyo", role="Software Engineering Co-op", when="Jan " + M + " May 2025", place="Boston, MA",
@@ -54,29 +55,32 @@ DATA = [
         "Used <b>Azure Functions</b> to create APIs that retrieve alert data, package into a PDF, and send to document storage."],
    stack="Azure Functions · Python · APIs"),
  dict(id="jnj", cat="experience", logo="jnj",
-   name="Johnson &amp; Johnson", role="Data Science Co-op", when="Jan " + M + " May 2024", place="Titusville, NJ",
+   name="Johnson &amp; Johnson", role="Machine Learning Co-op", when="Jan " + M + " May 2024", place="Titusville, NJ",
    pts=["Developed <b>71% accurate</b> <b>scikit-learn</b> models in <b>Python</b> to help reps identify patients unlikely to receive therapy.",
         "Compared clustering (k-means/hierarchical), random forest, and decision tree as possible solutions."],
    stack="scikit-learn · Python · Clustering"),
 
  dict(id="ballboy", cat="project", logo="ballboy", now=True,
    name="Ballboy", role="Fantasy tennis", when="May 2026 " + M + " now", place="",
-   pts=["Founded a platform launched on <b>iOS</b> where a growing user base joins fantasy leagues following live tennis matches.",
-        "Lead engineering to ensure a <b>low-latency, real-time</b> app using tools like <b>Redis</b>, Cloudflare, Supabase, and Render."],
+   pts=["Founded a platform launched on <b>iOS</b> with <b>1.5K+ impressions</b> where users join fantasy leagues following live tennis.",
+        "Led engineering using tools like <b>Django</b>, <b>Redis</b>, React Native, and Cloudflare to ensure a <b>low-latency, real-time</b> app.",
+        "Achieved <b>100K+ interactions</b> while building a social media following across platforms " + M + " Instagram and TikTok."],
    stack="React Native · Django · Redis · Supabase · Cloudflare",
    links=[("App Store", "https://apps.apple.com/app/ballboy-tennis/id6765790453"),
           ("GitHub", "https://github.com/kanavbengani/tennis_fantasy")]),
  dict(id="reddit", cat="project", logo="reddit",
-   name="Reddit Sentiment Analysis", role="Agentic application", when="Nov 2024", place="",
-   pts=["Fine-tuned an <b>LLM</b> that given a college-related query, constructs sentiment from the respective subreddit.",
-        "Parsed and filtered context using <b>RAG</b> and a <b>BERT</b> classifier; derived sentiment using the Meta <b>Llama 3.1B</b> model."],
-   stack="RAG · BERT · Llama 3.1B · PyTorch",
+   name="Reddit Sentiment Analysis", role="Agentic chatbot", when="Nov 2024", place="",
+   pts=["Fine-tuned an <b>LLM</b> that constructs sentiment from the respective subreddit, given a natural language query.",
+        "Parsed and filtered context using <b>RAG</b> and a <b>BERT</b> classifier; derived sentiment using the Meta <b>Llama 3.1 8B</b> model."],
+   stack="RAG · BERT · Llama 3.1 8B · PyTorch",
    links=[("GitHub", "https://github.com/zatchet/university-opinion-mining")]),
- dict(id="reversi", cat="project", logo="reversi",
-   name="Reversi", role="Java video game", when="Nov 2023", place="",
-   pts=["Architected a 2 player (human or AI w/ minimax algorithm) Go-like board game using <b>OOP</b> and <b>MVC</b> architecture."],
-   stack="Java · Minimax · MVC",
-   links=[("GitHub", "https://github.com/kanavbengani/Reversi")]),
+ dict(id="invariance", cat="project", logo="invariance",
+   name="Invariance", role="AI-governed site customization", when="Apr " + M + " Aug 2026", place="",
+   pts=["Architected an <b>SDK</b> that allows live UI restyling and restricted backend updates with a plain-English request per user.",
+        "Looped <b>LLM</b> generation against an automated verifier and <b>LLM-as-a-judge</b> until they clear developer-set invariants.",
+        "Devised a developer console to track website modification analytics, conflict resolutions, and end-user versioning."],
+   stack="TypeScript · React · Node.js · LLMs",
+   links=[("GitHub", "https://github.com/anuraagkolli/invariance")]),
 
  dict(id="factevo", cat="research", logo="northeastern",
    name="FactEvo Optimization", role="Evolutionary computing", when="Mar " + M + " Jun 2024", place="",
@@ -111,13 +115,14 @@ KEYS = {"experience":"w","project":"a","research":"s","education":"d"}
 # Slot geometry still comes from the category counts; a card may sit in another
 # category's arc, and keeps its own colour.
 ORDER = ["ballboy","hubspot","capitalone","klaviyo","fidelity","jnj",
-         "neu","tams","factevo","shriners","reversi","reddit"]
+         "neu","tams","factevo","shriners","invariance","reddit"]
 
 def js_entries():
     out=[]
     for e in DATA:
-        d={k:e[k] for k in ("id","cat","name","role","when") }
+        d={k:e[k] for k in ("id","cat","name","role") }
         d["logo"]=e["logo"]
+        if e.get("when"): d["when"]=e["when"]
         if e.get("now"): d["now"]=1
         if e.get("place"): d["place"]=e["place"]
         if e.get("pts"): d["pts"]=e["pts"]
@@ -277,6 +282,16 @@ body.editing .hub h1{cursor:text;text-decoration:none}
 .card .wh{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;
   font-size:clamp(7.8px,0.62vw,9px);color:var(--muted);letter-spacing:.04em;
   font-variant-numeric:tabular-nums}
+/* A card may carry no date. The slot collapses when empty, but edit mode
+   re-opens it as a dashed target so a date can be typed straight onto the card. */
+.card .wh:empty{display:none}
+.card[data-nodate] .dot{display:none}
+.card[data-nodate]:not(.now) .meta{display:none}
+body.editing .card .wh:empty{display:inline-block;min-width:38px;min-height:10px;
+  border-bottom:1px dashed var(--muted)}
+body.editing .card[data-nodate] .meta{display:flex}
+body.editing .card[data-nodate] .dot{display:block}
+.rw .wh:empty{display:none}
 .card .live{margin-left:auto;font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;
   font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper);
   background:var(--ink);border-radius:99px;padding:2px 6px}
@@ -359,6 +374,7 @@ body.editing .card .editbtn{display:block}
 .ed-row{margin-top:12px}
 .ed-lab{display:block;font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:9px;
   letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.ed-opt{text-transform:none;letter-spacing:.02em;opacity:.7;font-style:italic}
 .ed-box{border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-height:20px;
   color:var(--ink-2);font-size:15px;line-height:1.5;background:var(--paper)}
 .ed-box:focus{outline:none;border-color:var(--ink)}
@@ -610,6 +626,24 @@ themeBtn.addEventListener("click",function(){
   try{ localStorage.setItem("kb-theme", n); }catch(e){}
 });
 
+/* contenteditable leaves a stray <br> behind when the last character is
+   deleted, so "empty" has to mean "no visible text", not "falsy". */
+function isBlank(v){
+  return !String(v==null?"":v).replace(/<[^>]*>/g,"")
+          .replace(/&nbsp;/g,"").replace(/\u00a0/g,"").trim().length;
+}
+/* A dateless card hides its meta row unless the "now" badge still needs it. */
+function markDate(e){
+  var n=nodeById(e.id); if(!n) return;
+  if(isBlank(e.when)){
+    e.when="";
+    var el=n.el.querySelector(".wh");
+    if(el && el.innerHTML!=="") el.innerHTML="";
+  }
+  if(!e.when) n.el.setAttribute("data-nodate","1");
+  else n.el.removeAttribute("data-nodate");
+}
+
 /* ---------------- detail modal ---------------- */
 var dlg=document.getElementById("dlg"), dlgBody=document.getElementById("dlgBody"), lastFocus=null;
 function esc(s){ return s; }
@@ -617,7 +651,7 @@ function detailHTML(e){
   var h='<div class="d-head"><span class="mark"><img src="'+LOGOS[e.logo]+'" alt=""></span>'+
         '<span><span class="d-name">'+e.name+'</span><span class="d-role">'+e.role+'</span></span></div>';
   h+='<p class="d-meta"><span class="dot" style="background:var(--c-'+e.cat+')"></span>'+
-     '<span>'+catLabel(e.cat)+'</span><span>'+e.when+'</span>'+(e.place?'<span>'+e.place+'</span>':'')+'</p>';
+     '<span>'+catLabel(e.cat)+'</span>'+(e.when?'<span>'+e.when+'</span>':'')+(e.place?'<span>'+e.place+'</span>':'')+'</p>';
   if(e.pts){ h+='<ul class="d-pts">'; for(var i=0;i<e.pts.length;i++) h+='<li>'+e.pts[i]+'</li>'; h+='</ul>'; }
   if(e.courses){
     h+='<div class="courses">';
@@ -647,8 +681,8 @@ function editHTML(e){
      '<div class="ed-box" id="ed-name" contenteditable="true">'+e.name+'</div></div>';
   h+='<div class="ed-row"><span class="ed-lab">Subtitle</span>'+
      '<div class="ed-box" id="ed-role" contenteditable="true">'+e.role+'</div></div>';
-  h+='<div class="ed-row"><span class="ed-lab">Date</span>'+
-     '<div class="ed-box" id="ed-when" contenteditable="true">'+e.when+'</div></div>';
+  h+='<div class="ed-row"><span class="ed-lab">Date <span class="ed-opt">optional</span></span>'+
+     '<div class="ed-box" id="ed-when" contenteditable="true">'+(e.when||"")+'</div></div>';
   h+='<div class="ed-row"><span class="ed-lab">Location</span>'+
      '<div class="ed-box" id="ed-place" contenteditable="true">'+(e.place||"")+'</div></div>';
   h+='<div class="ed-row"><span class="ed-lab">Bullets</span><div class="ed-list" id="ed-pts">';
@@ -722,6 +756,7 @@ function wireEditor(e){
     out.name=dlgBody.querySelector("#ed-name").innerHTML.trim();
     out.role=dlgBody.querySelector("#ed-role").innerHTML.trim();
     out.when=dlgBody.querySelector("#ed-when").innerHTML.trim();
+    if(isBlank(out.when)) out.when="";
 
     /* fold into the live entry and the pending content payload */
     e.name=out.name; e.role=out.role; e.when=out.when;
@@ -744,9 +779,10 @@ function setFace(e){
   var n=nodeById(e.id); if(!n) return;
   var map={nm:"name",rl:"role",wh:"when"};
   for(var cls in map){
-    var el=n.el.querySelector("."+cls);
-    if(el && el.innerHTML!==e[map[cls]]) el.innerHTML=e[map[cls]];
+    var el=n.el.querySelector("."+cls), v=e[map[cls]]||"";
+    if(el && el.innerHTML!==v) el.innerHTML=v;
   }
+  markDate(e);
   var row=document.querySelector('.list .hit[data-id="'+e.id+'"]');
   if(row){
     var li=row.parentNode;
@@ -797,7 +833,7 @@ ENTRIES.forEach(function(e){
   if(c.links) e.links=c.links;
   b.innerHTML='<span class="mark"><img src="'+LOGOS[e.logo]+'" alt="" loading="lazy"></span>'+
     '<span><span class="nm">'+e.name+'</span><span class="rl">'+e.role+'</span></span>'+
-    '<span class="meta"><span class="dot"></span><span class="wh">'+e.when+'</span>'+
+    '<span class="meta"><span class="dot"></span><span class="wh">'+(e.when||"")+'</span>'+
     (e.now?'<span class="live">now</span>':'')+'</span>'+links+
     '<span class="handle h-w" data-h="w"></span><span class="handle h-r" data-h="r"></span>'+
     '<button class="editbtn" type="button" title="Edit details">&#9998;</button>';
@@ -813,9 +849,11 @@ ENTRIES.forEach(function(e){
   b.addEventListener("input",function(ev){
     var t=ev.target, map={nm:"name",rl:"role",wh:"when"};
     for(var cls in map) if(t.classList&&t.classList.contains(cls)) e[map[cls]]=t.innerHTML.trim();
+    markDate(e);
   });
   cardsWrap.appendChild(b);
   nodes.push({el:b,e:e});
+  markDate(e);
 });
 
 /* ---------------- polar layout ----------------
@@ -1207,7 +1245,7 @@ CATS.forEach(function(c){
     h+='<li class="rw"><button class="hit" type="button" data-id="'+e.id+'" aria-label="Details for '+e.name+'"></button>'+
        '<span class="mark"><img src="'+LOGOS[e.logo]+'" alt="" loading="lazy"></span>'+
        '<span><span class="nm">'+e.name+'</span><span class="rl">'+e.role+'</span>'+links+'</span>'+
-       '<span class="wh">'+e.when+'</span></li>';
+       '<span class="wh">'+(e.when||"")+'</span></li>';
   });
   sec.innerHTML=h+'</ul>';
   list.appendChild(sec);
@@ -1391,7 +1429,8 @@ if(LOCAL){
     paintWires:paintWires, redrawArcs:redrawArcs, dlg:dlg, openDetail:openDetail,
     hub:{h1:hubH1, role:hubRole, bio:hubBio},
     cardScale:cardScale,
-    setEditing:function(v){ editing=!!v; }
+    setEditing:function(v){ editing=!!v; },
+    isBlank:isBlank, markDate:markDate
   };
   var _s=document.createElement("script");
   _s.src="editor.js"; _s.defer=true;
@@ -1420,8 +1459,9 @@ if(LOCAL){
         var c=con.cards[n.e.id]; if(!c) return;
         [["nm","name"],["rl","role"],["wh","when"]].forEach(function(p){
           var el=n.el.querySelector("."+p[0]);
-          if(el&&c[p[1]]) el.innerHTML=c[p[1]];
+          if(el&&typeof c[p[1]]==="string"){ el.innerHTML=c[p[1]]; n.e[p[1]]=c[p[1]]; }
         });
+        markDate(n.e);
       });
       touched=true;
     }

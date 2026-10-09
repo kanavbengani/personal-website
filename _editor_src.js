@@ -168,6 +168,8 @@ function collect(){
       var el=n.el.querySelector("."+p[0]);
       if(el) o[p[1]]=el.innerHTML.trim();
     });
+    /* a cleared date is "", never the <br> contenteditable leaves behind */
+    if(A.isBlank(o.when)){ o.when=""; n.e.when=""; A.markDate(n.e); }
     ctext[n.e.id]=o;
   });
   return {
